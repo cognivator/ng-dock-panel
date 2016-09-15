@@ -1,0 +1,20 @@
+{
+  "name": "ng-dock-panel",
+  "version": "0.0.1",
+  "description": "A dockable panel for angular.",
+  "keywords": [
+    "angular",
+    "dock",
+    "dock panel"
+  ],
+  "repository": "cognivator/ng-dock-panel",
+  "main": "ng-dock-panel.js",
+  "author": "cognivator <slhenty@cognivator.com>",
+  "contributors": ["gabriele dardino"],
+  "license": "MIT",
+  "peerDependencies": {
+    "angular": "^1.5",
+    "jquery": "^3",
+    "jquery-ui": "^1"
+  }
+}
