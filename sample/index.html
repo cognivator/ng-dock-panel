@@ -6,28 +6,39 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
-    <script src="https://code.angularjs.org/1.3.0-beta.5/angular.js"></script>
-    <script src="ng-dock.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.js"></script>
+    <script src="../ng-dock-panel.js"></script>
     <script src="script.js"></script>
   </head>
 
-<body dock-ref="" ng-controller="sampleController">
-  <div id="1 top" style="height: 120px;" dock="'top'" dock-resizable>1. dock top</div>
-  <div id="2 left" dock-resizable style="width: 30%;" dock="div2.dock" dock-ref="">
+<body dock-panel ng-controller="sampleController">
+<div id="1 top" style="height: 100px;" dock="top" dock-resizable ng-show="isBarVisible[0]">1. dock top</div>
+  <div id="2 left" dock-resizable style="width: 25%;" dock="div2.dock" dock-panel ng-show="isBarVisible[1]">
     2. dock left
     <button ng-click="toggleLeftRight()">Toggle Left Right</button>
-    <div id="2.1 bottom" style="height: 80px;" dock="'bottom'">2.1. dock bottom on left</div>
+    <div id="2.1 bottom" style="height: 80px;" dock="bottom" dock-resizable ng-show="isBarVisible[2]">2.1. dock bottom on left</div>
   </div>
-  <div id="3 top" style="height: 80px;" dock="'top'">3. another dock top</div>
-  <div id="4 bottom" style="height: 80px;" dock="'bottom'" dock-resizable>4. dock bottom</div>
-  <div id="5 right" style="width: 140px;" dock="'right'" dock-resizable>5. dock right</div>
-  <div id="6 top" style="height: 80px;" dock="'top'">6. dock top</div>
-  <div id="7 fill" style="" dock="'fill'" dock-ref="">
+  <div id="3 top" style="height: 80px;" dock="top" ng-show="isBarVisible[3]">3. another dock top</div>
+  <div id="4 bottom" style="height: 80px;" dock="bottom" dock-resizable ng-show="isBarVisible[4]">4. dock bottom</div>
+  <div id="5 right" style="width: 140px;" dock="right" dock-resizable ng-show="isBarVisible[5]">5. dock right</div>
+  <div id="6 top" style="height: 80px;" dock="top" ng-show="isBarVisible[6]">6. dock top</div>
+  <div id="7 fill" style="" dock="fill" dock-panel>
     7. dock fill
-    <div id="7.1 bottom" style="height: 90px; " dock="'bottom'">7.1. dock bottom</div>
-    <div id="7.2 right" style="width: 140px; " dock="'right'">7.2. dock right</div>
-    <div id="7.3 fill" style="" dock="'fill'">
-      <br />7.3. fill</div>
+    <div id="7.1 bottom" style="height: 90px; " dock="bottom" ng-show="isBarVisible[7]">7.1. dock bottom</div>
+    <div id="7.2 right" style="width: 140px; " dock="right" ng-show="isBarVisible[8]">7.2. dock right</div>
+    <div id="7.3 fill" style="" dock="fill">
+      <br />7.3. fill
+    <p>
+      <input type="checkbox" ng-model="isBarVisible[0]" />1. dock top<br />
+      <input type="checkbox" ng-model="isBarVisible[1]" />2. dock left<br />
+      <input type="checkbox" ng-model="isBarVisible[2]" />2.1 dock bottome left<br />
+      <input type="checkbox" ng-model="isBarVisible[3]" />3. another dock top<br />
+      <input type="checkbox" ng-model="isBarVisible[4]" />4. dock bottom<br />
+      <input type="checkbox" ng-model="isBarVisible[5]" />5. dock right<br />
+      <input type="checkbox" ng-model="isBarVisible[6]" />6. dock top<br />
+      <input type="checkbox" ng-model="isBarVisible[7]" />7.1 dock bottom<br />
+      <input type="checkbox" ng-model="isBarVisible[8]" />7.2 dock right<br />
+    </p></div>
   </div>
 </body>
 
