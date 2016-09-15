@@ -12,15 +12,18 @@
   </head>
 
 <body dock-panel ng-controller="sampleController">
-<div id="1 top" style="height: 100px;" dock="top" dock-resizable ng-show="isBarVisible[0]">1. dock top</div>
+<div id="1 top" style="height: 100px; max-height: 40%;" dock="top" dock-resizable ng-show="isBarVisible[0]">1. dock top
+  <div class="dock-resize-handle" style="height: 8px; width: 100%; background-color: lightblue"></div>
+  <div class="dock-collapse-handle" style="height: 8px; width: 60px; left: 50%; transform: translateX(-50%); cursor: pointer; background-color: gray;" ng-click="vm.toggleMaxHeight()"></div>
+</div>
   <div id="2 left" dock-resizable style="width: 25%;" dock="div2.dock" dock-panel ng-show="isBarVisible[1]">
     2. dock left
     <button ng-click="toggleLeftRight()">Toggle Left Right</button>
-    <div id="2.1 bottom" style="height: 80px;" dock="bottom" dock-resizable ng-show="isBarVisible[2]">2.1. dock bottom on left</div>
+    <div id="2.1 bottom" style="height: 80px;" dock="bottom" dock-resizable="{minHeight: 50}" ng-show="isBarVisible[2]">2.1. dock bottom on left (minHeight 50px)</div>
   </div>
   <div id="3 top" style="height: 80px;" dock="top" ng-show="isBarVisible[3]">3. another dock top</div>
-  <div id="4 bottom" style="height: 80px;" dock="bottom" dock-resizable ng-show="isBarVisible[4]">4. dock bottom</div>
-  <div id="5 right" style="width: 140px;" dock="right" dock-resizable ng-show="isBarVisible[5]">5. dock right</div>
+  <div id="4 bottom" style="height: 80px; max-height: 50%;" dock="bottom" dock-resizable ng-show="isBarVisible[4]">4. dock bottom (min-height 30px, max-height 50%)</div>
+  <div id="5 right" style="width: 140px;" dock="right" dock-resizable="{minWidth: 100, maxWidth: 500}" ng-show="isBarVisible[5]">5. dock right (minWidth 100px, maxWidth 500px)</div>
   <div id="6 top" style="height: 80px;" dock="top" ng-show="isBarVisible[6]">6. dock top</div>
   <div id="7 fill" style="" dock="fill" dock-panel>
     7. dock fill

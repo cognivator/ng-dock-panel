@@ -10,6 +10,12 @@
 
   var validPositions = ['top', 'right', 'bottom', 'left', 'fill'],
       dockPositionHandles = {top: 's', right: 'w', bottom: 'n', left: 'e'};
+  var uiResizeClasses = {
+    CUSTOM_RESIZE_HANDLE_CLASS: 'dock-resize-handle',
+    CUSTOM_COLLAPSE_HANDLE_CLASS: 'dock-collapse-handle',
+    JQUI_RESIZE_HANDLE_CLASS: 'ui-resizable-handle',
+    JQUI_RESIZE_DIRECTION_PREFIX: 'ui-resizable-'
+  };
 
   angular.module('ngDockPanel', [])
       .factory('dockService', dockService)
@@ -23,6 +29,7 @@
       dockPanels: {},
       validPositions: validPositions,
       dockPositionHandles: dockPositionHandles,
+      uiResizeClasses: uiResizeClasses,
       Panel: panelFactory()
     };
   }
@@ -212,17 +219,51 @@
     return {
       require: 'dock',
       restrict: 'A',
-      controller: dockResizableDirectiveController
+      controller: dockResizableDirectiveController,
+      controllerAs: 'vm'
     };
   }
 
   dockResizableDirectiveController.$inject = ['$scope', '$element', 'dockService'];
   function dockResizableDirectiveController($scope, $element, dockService) {
-    var dockPosition = evalDockPosition($element.attr('dock'), $scope);
+    var vm = this;
 
-    if (dockService.validPositions.indexOf(dockPosition) !== -1 && dockPosition !== 'fill') {
-      enableResize($element, dockPosition);
-    }
+    var resizeClasses = dockService.uiResizeClasses;
+    var stylePlaceholder = {
+      maxHeight: $element.css('max-height'),
+      height: $element.css('height'),
+      maxWidth: $element.css('max-width'),
+      width: $element.css('width')
+    };
+
+    var dockPosition = evalDockPosition($element.attr('dock'), $scope),
+        resizeHandleDirection;
+
+    vm.toggleMaxHeight = function () {
+
+      if ($element.css('max-height') === '0px') {
+        $element.css('height', stylePlaceholder.height);
+        $element.css('max-height', stylePlaceholder.maxHeight);
+      } else {
+        stylePlaceholder.height = $element.css('height');
+        stylePlaceholder.maxHeight = $element.css('max-height');
+        $element.css('max-height', '0');
+      }
+    };
+
+    vm.toggleMaxWidth = function () {
+
+      if ($element.css('max-width') === '0px') {
+        $element.css('width', stylePlaceholder.width);
+        $element.css('max-width', stylePlaceholder.maxWidth);
+      } else {
+        stylePlaceholder.width = $element.css('width');
+        stylePlaceholder.maxWidth = $element.css('max-width');
+        $element.css('max-width', '0');
+      }
+    };
+
+    enableResize();
 
     $scope.$watch(function () {
       var newDockPosition = evalDockPosition($element.attr('dock'), $scope);
@@ -230,16 +271,50 @@
       if (newDockPosition !== dockPosition) {
         dockPosition = newDockPosition;
         $element.resizable('destroy');
-        if (newDockPosition !== 'fill') {
-          enableResize($element, dockPosition);
-        }
+        enableResize();
       }
     });
 
-    function enableResize($element, dockPosition) {
-      $element.resizable({
-        handles: dockService.dockPositionHandles[dockPosition]
-      });
+    function enableResize() {
+      if (dockPosition !== 'fill') {
+        $element.resizable(resolveResizeOptions());
+      }
+    }
+
+    function resolveResizeOptions() {
+      resizeHandleDirection = dockService.dockPositionHandles[dockPosition];
+      var defaultOptions = {
+            handles: resizeHandleDirection
+          },
+          customOptions = {},
+          optionsAttr = evalResizeOptions();
+
+      // custom dock-resize-handle
+      var resizeHandle = $element.find('.' + resizeClasses.CUSTOM_RESIZE_HANDLE_CLASS).first();
+      if (resizeHandle.length) {
+        addJquiClasses(resizeHandle);
+        (customOptions.handles = customOptions.handles || {})[resizeHandleDirection] = '.' + resizeClasses.CUSTOM_RESIZE_HANDLE_CLASS;
+      }
+
+      // custom dock-collapse-handle
+      var collapseHandle = $element.find('.' + resizeClasses.CUSTOM_COLLAPSE_HANDLE_CLASS).first();
+      if (collapseHandle.length) {
+        addJquiClasses(collapseHandle);
+      }
+
+      return angular.merge({}, defaultOptions, customOptions, optionsAttr);
+    }
+
+    function addJquiClasses(handle) {
+      handle.addClass([
+        resizeClasses.JQUI_RESIZE_HANDLE_CLASS,
+        resizeClasses.JQUI_RESIZE_DIRECTION_PREFIX + resizeHandleDirection
+      ].join(' '));
+    }
+
+    function evalResizeOptions() {
+      var optionsAttr = $scope.$eval($element.attr('dock-resizable'));
+      return angular.isObject(optionsAttr) && optionsAttr || {};
     }
   }
 

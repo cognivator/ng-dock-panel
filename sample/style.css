@@ -4,7 +4,7 @@ body {
   margin: 0;
 }
 div[dock] {
-  border:solid 1px black; 
+  border:solid 1px black;
 }
 .dock-top {
   margin-bottom: 10px;
@@ -34,4 +34,8 @@ div[dock] {
 .dock-right.ui-resizable {
   border-left-width: 2px;
   border-left-color: red;
+}
+
+[id='4 bottom'] {
+  min-height: 30px;
 }
