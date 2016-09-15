@@ -3,6 +3,8 @@ ngDock
 
 angular module for tag dock system
 
+Forked from dardino/ngDock in order to add ng-show/hide support.
+
 usage:
 ------
 
