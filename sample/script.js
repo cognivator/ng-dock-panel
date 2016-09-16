@@ -14,7 +14,7 @@
         $scope.div2.dock = 'left';
       }
     };
-    $scope.isBarVisible = [ false, true, true, false, true, true, false, true, true ];
+    $scope.isBarVisible = [ true, true, true, false, true, true, false, true, true ];
   });
 
 })();

@@ -1,48 +1,58 @@
 <!DOCTYPE html>
 <html ng-app="testdock">
 
-  <head>
-    <link rel="stylesheet" href="style.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.js"></script>
-    <script src="../ng-dock-panel.js"></script>
-    <script src="script.js"></script>
-  </head>
+<head>
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/css/smoothness/jquery-ui-1.10.0.custom.min.css"/>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.10.0/jquery-ui.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.8/angular.js"></script>
+  <script src="../ng-dock-panel.js"></script>
+  <script src="script.js"></script>
+</head>
 
 <body dock-panel ng-controller="sampleController">
-<div id="1 top" style="height: 100px; max-height: 40%;" dock="top" dock-resizable ng-show="isBarVisible[0]">1. dock top
-  <div class="dock-resize-handle" style="height: 8px; width: 100%; background-color: lightblue"></div>
-  <div class="dock-collapse-handle" style="height: 8px; width: 60px; left: 50%; transform: translateX(-50%); cursor: pointer; background-color: gray;" ng-click="vm.toggleMaxHeight()"></div>
+<div id="top1" dock="top" dock-resizable ng-show="isBarVisible[0]">1. dock top (min-height 30px, max-height 30%)</div>
+<div id="left2" dock-resizable dock="div2.dock" dock-panel ng-show="isBarVisible[1]">
+  2. dock left
+  <button ng-click="toggleLeftRight()">Toggle Left Right</button>
+  <div id="bottom2.1" dock="bottom" dock-resizable="{minHeight: 50}" ng-show="isBarVisible[2]">2.1. dock bottom on left
+    (minHeight 50px)
+  </div>
 </div>
-  <div id="2 left" dock-resizable style="width: 25%;" dock="div2.dock" dock-panel ng-show="isBarVisible[1]">
-    2. dock left
-    <button ng-click="toggleLeftRight()">Toggle Left Right</button>
-    <div id="2.1 bottom" style="height: 80px;" dock="bottom" dock-resizable="{minHeight: 50}" ng-show="isBarVisible[2]">2.1. dock bottom on left (minHeight 50px)</div>
-  </div>
-  <div id="3 top" style="height: 80px;" dock="top" ng-show="isBarVisible[3]">3. another dock top</div>
-  <div id="4 bottom" style="height: 80px; max-height: 50%;" dock="bottom" dock-resizable ng-show="isBarVisible[4]">4. dock bottom (min-height 30px, max-height 50%)</div>
-  <div id="5 right" style="width: 140px;" dock="right" dock-resizable="{minWidth: 100, maxWidth: 500}" ng-show="isBarVisible[5]">5. dock right (minWidth 100px, maxWidth 500px)</div>
-  <div id="6 top" style="height: 80px;" dock="top" ng-show="isBarVisible[6]">6. dock top</div>
-  <div id="7 fill" style="" dock="fill" dock-panel>
-    7. dock fill
-    <div id="7.1 bottom" style="height: 90px; " dock="bottom" ng-show="isBarVisible[7]">7.1. dock bottom</div>
-    <div id="7.2 right" style="width: 140px; " dock="right" ng-show="isBarVisible[8]">7.2. dock right</div>
-    <div id="7.3 fill" style="" dock="fill">
-      <br />7.3. fill
+<div id="top3" dock="top" dock-collapsible ng-show="isBarVisible[3]">3. another dock top
+  <div> class="dock-collapse-handle"</div>
+</div>
+<div id="bottom4" dock="bottom" dock-resizable dock-collapsible ng-show="isBarVisible[4]">4. dock bottom, collapsible,
+  custom handles (min-height 5em, max-height 40%)
+  <div class="dock-resize-handle"></div>
+  <div class="dock-collapse-handle" ng-click="vm.toggleCollapse()"></div>
+</div>
+<div id="right5" dock="right" dock-resizable="{minWidth: 100, maxWidth: 500}" dock-collapsible ng-show="isBarVisible[5]">5. dock right
+  (minWidth 100px, maxWidth 500px)
+  <div class="dock-resize-handle"></div>
+  <div class="dock-collapse-handle" ng-click="vm.toggleCollapse()"></div>
+</div>
+<div id="top6" dock="top" ng-show="isBarVisible[6]">6. dock top</div>
+<div id="fill7" dock="fill" dock-panel>
+  7. dock fill
+  <div id="bottom7.1" dock="bottom" ng-show="isBarVisible[7]">7.1. dock bottom</div>
+  <div id="right7.2" dock="right" ng-show="isBarVisible[8]">7.2. dock right</div>
+  <div id="fill7.3" dock="fill">
+    <br/>7.3. fill
     <p>
-      <input type="checkbox" ng-model="isBarVisible[0]" />1. dock top<br />
-      <input type="checkbox" ng-model="isBarVisible[1]" />2. dock left<br />
-      <input type="checkbox" ng-model="isBarVisible[2]" />2.1 dock bottome left<br />
-      <input type="checkbox" ng-model="isBarVisible[3]" />3. another dock top<br />
-      <input type="checkbox" ng-model="isBarVisible[4]" />4. dock bottom<br />
-      <input type="checkbox" ng-model="isBarVisible[5]" />5. dock right<br />
-      <input type="checkbox" ng-model="isBarVisible[6]" />6. dock top<br />
-      <input type="checkbox" ng-model="isBarVisible[7]" />7.1 dock bottom<br />
-      <input type="checkbox" ng-model="isBarVisible[8]" />7.2 dock right<br />
+      <input type="checkbox" ng-model="isBarVisible[0]"/>1. dock top<br/>
+      <input type="checkbox" ng-model="isBarVisible[1]"/>2. dock left<br/>
+      <input type="checkbox" ng-model="isBarVisible[2]"/>2.1 dock bottome left<br/>
+      <input type="checkbox" ng-model="isBarVisible[3]"/>3. another dock top<br/>
+      <input type="checkbox" ng-model="isBarVisible[4]"/>4. dock bottom<br/>
+      <input type="checkbox" ng-model="isBarVisible[5]"/>5. dock right<br/>
+      <input type="checkbox" ng-model="isBarVisible[6]"/>6. dock top<br/>
+      <input type="checkbox" ng-model="isBarVisible[7]"/>7.1 dock bottom<br/>
+      <input type="checkbox" ng-model="isBarVisible[8]"/>7.2 dock right<br/>
     </p></div>
-  </div>
+</div>
 </body>
 
 

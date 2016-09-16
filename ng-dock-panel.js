@@ -9,7 +9,7 @@
    */
 
   var validPositions = ['top', 'right', 'bottom', 'left', 'fill'],
-      dockPositionHandles = {top: 's', right: 'w', bottom: 'n', left: 'e'};
+    dockPositionHandles = {top: 's', right: 'w', bottom: 'n', left: 'e'};
   var uiResizeClasses = {
     CUSTOM_RESIZE_HANDLE_CLASS: 'dock-resize-handle',
     CUSTOM_COLLAPSE_HANDLE_CLASS: 'dock-collapse-handle',
@@ -18,10 +18,10 @@
   };
 
   angular.module('ngDockPanel', [])
-      .factory('dockService', dockService)
-      .directive('dockPanel', dockPanelDirective)
-      .directive('dock', dockDirective)
-      .directive('dockResizable', dockResizableDirective);
+         .factory('dockService', dockService)
+         .directive('dockPanel', dockPanelDirective)
+         .directive('dock', dockDirective)
+         .directive('dockResizable', dockResizableDirective);
 
 
   function dockService() {
@@ -230,38 +230,22 @@
 
     var resizeClasses = dockService.uiResizeClasses;
     var stylePlaceholder = {
-      maxHeight: $element.css('max-height'),
-      height: $element.css('height'),
-      maxWidth: $element.css('max-width'),
-      width: $element.css('width')
+      height: {
+        'min-height': $element.css('min-height'),
+        'max-height': $element.css('max-height'),
+        'height': $element.css('height')
+      },
+      weight: {
+        'min-width': $element.css('min-width'),
+        'max-width': $element.css('max-width'),
+        'width': $element.css('width')
+      }
     };
 
     var dockPosition = evalDockPosition($element.attr('dock'), $scope),
-        resizeHandleDirection;
+      resizeHandleDirection;
 
-    vm.toggleMaxHeight = function () {
-
-      if ($element.css('max-height') === '0px') {
-        $element.css('height', stylePlaceholder.height);
-        $element.css('max-height', stylePlaceholder.maxHeight);
-      } else {
-        stylePlaceholder.height = $element.css('height');
-        stylePlaceholder.maxHeight = $element.css('max-height');
-        $element.css('max-height', '0');
-      }
-    };
-
-    vm.toggleMaxWidth = function () {
-
-      if ($element.css('max-width') === '0px') {
-        $element.css('width', stylePlaceholder.width);
-        $element.css('max-width', stylePlaceholder.maxWidth);
-      } else {
-        stylePlaceholder.width = $element.css('width');
-        stylePlaceholder.maxWidth = $element.css('max-width');
-        $element.css('max-width', '0');
-      }
-    };
+    vm.toggleCollapse = _collapse;
 
     enableResize();
 
@@ -275,6 +259,25 @@
       }
     });
 
+    function _collapse() {
+      var dimension = "top|bottom".indexOf(dockPosition) !== -1 ? 'height' : 'width';
+      var minName = ['min', dimension].join('-'),
+        maxName = ['max', dimension].join('-');
+      var cssZero = '0px';
+
+      if ($element.css(maxName) === cssZero) {
+        angular.forEach(stylePlaceholder[dimension], function (val, key) {
+          $element.css(key, val);
+        });
+      } else {
+        angular.forEach(stylePlaceholder[dimension], function (val, key) {
+          stylePlaceholder[dimension][key] = $element.css(key);
+        });
+        $element.css(minName, cssZero);
+        $element.css(maxName, cssZero);
+      }
+    }
+
     function enableResize() {
       if (dockPosition !== 'fill') {
         $element.resizable(resolveResizeOptions());
@@ -284,10 +287,10 @@
     function resolveResizeOptions() {
       resizeHandleDirection = dockService.dockPositionHandles[dockPosition];
       var defaultOptions = {
-            handles: resizeHandleDirection
-          },
-          customOptions = {},
-          optionsAttr = evalResizeOptions();
+          handles: resizeHandleDirection
+        },
+        customOptions = {},
+        optionsAttr = evalResizeOptions();
 
       // custom dock-resize-handle
       var resizeHandle = $element.find('.' + resizeClasses.CUSTOM_RESIZE_HANDLE_CLASS).first();
