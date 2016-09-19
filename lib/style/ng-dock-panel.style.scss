@@ -1,0 +1,24 @@
+@import './ng-dock-panel.theme';
+@import './ng-dock-panel.mixins';
+
+
+[dock] {
+  border-width: $dock-border-width--normal;
+  border-style: $dock-border-style--normal;
+  border-color: $dock-border-color--normal;
+}
+
+@include dock-style-generator('top');
+@include dock-style-generator('bottom');
+@include dock-style-generator('left');
+@include dock-style-generator('right');
+
+.dock-collapse-handle {
+  background-color: $dock-collapse-handle-background-color;
+  cursor: $dock-collapse-handle-cursor;
+
+  &::before {
+    @include dock-collapse-handle-image;
+  }
+}
+

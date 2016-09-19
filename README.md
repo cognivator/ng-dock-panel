@@ -6,7 +6,7 @@ _Forked from dardino/ngDock in order to add ng-show/hide and collapsible panel s
 
 ##Usage:
 
-###`dock-panel` and `dock`
+###`ng-dock-panel` and `dock`
 
 
 ```html

@@ -1,171 +1,65 @@
 * {
-  box-sizing: border-box; }
+  box-sizing: border-box;
+}
 
 body {
   padding: 0;
-  margin: 0; }
+  margin: 0;
+}
 
-div[dock] {
-  border: solid 1px lightgray; }
+[dock-collapsible] .dock-collapse-handle {
+  background-color: darkgray;
+}
 
-.dock-top {
-  margin-bottom: 5px; }
-  .dock-top[dock-resizable] {
-    border-bottom-width: 4px; }
-    .dock-top[dock-resizable] .dock-resize-handle {
-      bottom: -8px;
-      height: 8px;
-      width: 100%; }
-  .dock-top[dock-collapsible] {
-    border-bottom-width: 8px; }
-    .dock-top[dock-collapsible] .dock-collapse-handle {
-      bottom: -7px;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 6px;
-      width: 60px;
-      background-color: white;
-      cursor: pointer; }
-      .dock-top[dock-collapsible] .dock-collapse-handle::before {
-        content: '----';
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        top: 1px;
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 6px;
-        color: gray; }
-  .dock-top[dock-resizable] {
-    border-bottom-color: lightblue; }
+[dock-collapsible] .dock-collapse-handle::before {
+  color: lightgray;
+}
 
-.dock-bottom {
-  margin-top: 5px; }
-  .dock-bottom[dock-resizable] {
-    border-top-width: 4px; }
-    .dock-bottom[dock-resizable] .dock-resize-handle {
-      top: -8px;
-      height: 8px;
-      width: 100%; }
-  .dock-bottom[dock-collapsible] {
-    border-top-width: 8px; }
-    .dock-bottom[dock-collapsible] .dock-collapse-handle {
-      top: -7px;
-      left: 50%;
-      transform: translateX(-50%);
-      height: 6px;
-      width: 60px;
-      background-color: white;
-      cursor: pointer; }
-      .dock-bottom[dock-collapsible] .dock-collapse-handle::before {
-        content: '----';
-        position: absolute;
-        left: 50%;
-        transform: translateX(-50%);
-        bottom: 1px;
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 6px;
-        color: gray; }
-  .dock-bottom[dock-resizable] {
-    border-top-color: lightblue; }
-
-.dock-left {
-  margin-right: 5px; }
-  .dock-left[dock-resizable] {
-    border-right-width: 4px; }
-    .dock-left[dock-resizable] .dock-resize-handle {
-      right: -8px;
-      width: 8px;
-      height: 100%; }
-  .dock-left[dock-collapsible] {
-    border-right-width: 8px; }
-    .dock-left[dock-collapsible] .dock-collapse-handle {
-      right: -7px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 6px;
-      height: 60px;
-      background-color: white;
-      cursor: pointer; }
-      .dock-left[dock-collapsible] .dock-collapse-handle::before {
-        content: '----';
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        left: 1px;
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 6px;
-        color: gray; }
-  .dock-left[dock-resizable] {
-    border-right-color: lightblue; }
-
-.dock-right {
-  margin-left: 5px; }
-  .dock-right[dock-resizable] {
-    border-left-width: 4px; }
-    .dock-right[dock-resizable] .dock-resize-handle {
-      left: -8px;
-      width: 8px;
-      height: 100%; }
-  .dock-right[dock-collapsible] {
-    border-left-width: 8px; }
-    .dock-right[dock-collapsible] .dock-collapse-handle {
-      left: -7px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 6px;
-      height: 60px;
-      background-color: white;
-      cursor: pointer; }
-      .dock-right[dock-collapsible] .dock-collapse-handle::before {
-        content: '----';
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        right: 1px;
-        font-size: 16px;
-        font-weight: bold;
-        line-height: 6px;
-        color: gray; }
-  .dock-right[dock-resizable] {
-    border-left-color: lightblue; }
-
-/* specific docks */
 #top1 {
-  height: 100px; }
+  height: 100px;
+}
 
 #top1[dock-resizable] {
   min-height: 30px;
-  max-height: 30%; }
+  max-height: 30%;
+}
 
 #left2 {
-  width: 25%; }
+  width: 25%;
+}
 
-[id='#bottom2.1'] {
-  height: 80px; }
+[id='bottom2.1'] {
+  height: 80px;
+}
 
 #top3 {
-  height: 80px; }
+  height: 80px;
+}
 
 #bottom4 {
-  height: 100px; }
+  height: 100px;
+}
 
 #bottom4[dock-resizable] {
   min-height: 5em;
   max-height: 40%;
-  transition: max-height 0.25s ease-in; }
+}
 
 #right5 {
-  width: 140px; }
+  width: 140px;
+  min-width: 100px;
+  max-width: 500px;
+}
 
 #top6 {
-  height: 80px; }
+  height: 80px;
+}
 
 [id='bottom7.1'] {
-  height: 90px; }
+  height: 90px;
+}
 
 [id='right7.2'] {
-  width: 140px; }
+  width: 140px;
+}
 

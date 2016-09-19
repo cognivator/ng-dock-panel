@@ -11,4 +11,7 @@
 
 
 ### Project
-sample
+sample/
+.stylelintrc*
+browserslist
+lib/**/*.css
