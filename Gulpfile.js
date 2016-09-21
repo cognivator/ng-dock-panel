@@ -27,30 +27,6 @@
 
 
   //// RELEASE
-  gulp.task('changelog', function (done) {
-    pump([
-      gulp.src(files.CHANGELOG, {
-        buffer: false
-      }),
-      $G.conventionalChangelog({
-        preset: 'angular' // Or to any other commit message convention you use.
-      }),
-      gulp.dest('./')
-    ], done);
-  });
-
-  /*
-   gulp.task('github-release', function (done) {
-   conventionalGithubReleaser({
-   // TODO:1 Modify for this project
-   type: "oauth",
-   token: '0126af95c0e2d9b0a7c78738c4c00a860b04acc8' // change this to your own GitHub token or use an environment variable
-   }, {
-   preset: 'angular' // Or to any other commit message convention you use.
-   }, done);
-   });
-   */
-
 
   gulp.task('recommend-bump', function () {
     var cmd = 'conventional-recommended-bump -p angular';
@@ -75,6 +51,18 @@
     pump([
       gulp.src(['./package.json']),
       $G.bump({type: type}).on('error', $G.util.log),
+      gulp.dest('./')
+    ], done);
+  });
+
+  gulp.task('changelog', function (done) {
+    pump([
+      gulp.src(files.CHANGELOG, {
+        buffer: false
+      }),
+      $G.conventionalChangelog({
+        preset: 'angular' // Or to any other commit message convention you use.
+      }),
       gulp.dest('./')
     ], done);
   });
@@ -106,6 +94,18 @@
       return JSON.parse(fs.readFileSync('./package.json', 'utf8')).version;
     }
   });
+
+  /*
+   gulp.task('github-release', function (done) {
+   conventionalGithubReleaser({
+   // TODO:1 Modify for this project
+   type: "oauth",
+   token: '0126af95c0e2d9b0a7c78738c4c00a860b04acc8' // change this to your own GitHub token or use an environment variable
+   }, {
+   preset: 'angular' // Or to any other commit message convention you use.
+   }, done);
+   });
+   */
 
   gulp.task('release', function (done) {
     $G.sequence(

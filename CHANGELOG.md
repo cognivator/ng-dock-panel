@@ -1,3 +1,13 @@
+<a name="0.1.1"></a>
+## [0.1.1](https://github.com/cognivator/ng-dock-panel/compare/0.1.0...v0.1.1) (2016-09-21)
+
+
+### Bug Fixes
+
+* **npm, bower:** update ignore files and settings ([1bfc669](https://github.com/cognivator/ng-dock-panel/commit/1bfc669))
+
+
+
 <a name="0.1.0"></a>
 # [0.1.0](https://github.com/cognivator/ng-dock-panel/compare/v0.0.1...0.1.0) (2016-09-21)
 
