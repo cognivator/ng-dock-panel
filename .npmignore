@@ -15,3 +15,4 @@ sample/
 .stylelintrc*
 browserslist
 lib/**/*.css
+Gulpfile.js
