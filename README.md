@@ -6,7 +6,7 @@ _Forked from dardino/ngDock in order to add ng-show/hide and collapsible panel s
 
 ##Usage:
 
-###`ng-dock-panel` and `dock`
+###`dock-panel` and `dock`
 
 
 ```html
@@ -29,6 +29,7 @@ example:
 ```html
 <body>
   <div dock-panel>
+    <div dock="bottom">Bottom</div>
     <div dock="fill">my content</div>
   </div>
 </body>
@@ -52,7 +53,7 @@ If you want to be able to resize a dock you need to set the `dock-resizable` dir
 ```html
 <body>
   <div dock-panel>
-    <div dock="top" dock-resizable>Top</div>
+    <div dock="bottom" dock-resizable>Bottom</div>
     <div dock="fill">Fill</div>
   </div>
 </body>
@@ -63,7 +64,7 @@ You can also pass an options object that will be passed through to the underlyin
 ```html
 <body>
   <div dock-panel>
-    <div dock="top" dock-resizable="{maxHeight: 300}">Top</div>
+    <div dock="bottom" dock-resizable="{maxHeight: 300}">Bottom</div>
     <div dock="fill">Fill</div>
   </div>
 </body>
@@ -71,21 +72,45 @@ You can also pass an options object that will be passed through to the underlyin
 
 See [jquery-ui resizable](http://api.jqueryui.com/resizable/) docs for possible options.
 
-If you want to customize the resize handles, you can include an HTML element as a child of the `dock-resizable` element, with a css class of 'dock-resize-handle.' The `dock-resizable` directive will locate the child element and convert it to a resize handle.
+If you want to customize the resize handles, you can include an HTML element with a css class of 'dock-resize-handle' as a child of the `dock-resizable` element. The `dock-resizable` directive will locate the child element and convert it to a resize handle.
 
 ```html
 <body>
   <div dock-panel>
-    <div dock="bottom" dock-resizable>Top
+    <div dock="bottom" dock-resizable>Bottom
       <div dock-resize-handle></div>
     </div>
+    <div dock="fill">Fill</div>
   </div>
 </body>
 ```
 
+You can use both `dock-resizable` and `dock-collapsible` on the same dock, if desired.
+
 >notice:
 >you can only resize a non 'fill' dock
 
+###`dock-collapsible`
+
+If you want to be able to collapse a dock you need to set the `dock-collapsible` directive, AND include an HTML element with a css class of 'dock-collapse-handle' as a child of the `dock-collapsible` element. The `dock-collapsible` directive will locate the child element and convert it to a collapse handle.
+
+```html
+<body>
+  <div dock-panel>
+    <div dock="bottom" dock-collapsible>Bottom
+          <div dock-collapse-handle></div>
+        </div>
+    </div>
+    <div dock="fill">Fill</div>
+  </div>
+</body>
+```
+
+You can use both `dock-collapsible` and `dock-resizable` on the same dock, if desired.
+
+>notice:
+>you can only collapse a non 'fill' dock
+
 ##Styling
 
-Because ng-dock-panel components are composed of normal HTML elements, you can style them as necessary using a combination of the jquery-ui classes, ng-dock-panel classes and elements, plus your custom classes.
+Because ng-dock-panel components are composed of normal HTML elements, you can style them as necessary using a combination of the jquery-ui classes, ng-dock-panel classes and attributes, plus your own custom classes.
