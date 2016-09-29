@@ -2,6 +2,7 @@
   "name": "ng-dock-panel",
   "description": "A dockable panel for angular.",
   "main": "ng-dock-panel.js",
+  "main.scss": "./lib/style/ng-dock-panel.style.scss",
   "authors": [
     "cognivator"
   ],
@@ -28,5 +29,10 @@
     "lib/**/*.css",
     "Gulpfile.js"
 
+  ],
+  "dependencies": [
+    "jquery",
+    "jquery-ui",
+    "angular"
   ]
 }
