@@ -3,31 +3,45 @@
   var path = require('path'),
       fs = require('fs');
 
+  var appRoot = require('app-root-path').toString();
+
   var gulp = require('gulp'),
       $G = require('gulp-load-plugins')(),
       pump = require('pump'),
-      combiner = require('stream-combiner2'),
-      del = require('del'),
-      conventionalGithubReleaser = require('conventional-github-releaser');
+      del = require('del');
+      // combiner = require('stream-combiner2'),
+      // conventionalGithubReleaser = require('conventional-github-releaser');
 
   var yargs = require('yargs'),
-      argv = yargs.argv;
+      argv = yargs.argv,
+      _ = require('lodash'),
+      Q = require('q');
 
-  var root = __dirname,
-      libroot = path.join(root, 'lib'),
-      stageroot = path.join(root, 'stage');
+  var conversions = require(path.join(appRoot, 'util', 'conversions.js'));
+
+  var root = appRoot;
+  var paths = {
+    root: root,
+    libroot: path.join(root, 'lib'),
+    styleroot: path.join(root, 'lib', 'style'),
+    stageroot: path.join(root, 'stage')
+  };
+
+  var globs = {
+    scss: path.join('**', '*.scss'),
+    less: path.join('**', '*.less'),
+    modules: path.join('**', '*.module.js'),
+    js: path.join('**', '*.js')
+  };
 
   var files = {
     CHANGELOG: 'CHANGELOG.md'
   };
 
-  var sassOptions = {
-    outputStyle: 'expanded'
-  };
-
 
   //// RELEASE
 
+  /// Version
   gulp.task('recommend-bump', function () {
     var cmd = 'conventional-recommended-bump -p angular';
 
@@ -42,7 +56,6 @@
         }));
   });
 
-
   gulp.task('bump-version', function (done) {
     // Set command argument `--bump <type>` to specify 'major', 'minor' or a 'patch' [default] change.
     // Use task 'recommend-bump' to get a suggested type based on commit structure.
@@ -55,6 +68,7 @@
     ], done);
   });
 
+  /// Changelog / Release notes
   gulp.task('changelog', function (done) {
     pump([
       gulp.src(files.CHANGELOG, {
@@ -67,6 +81,7 @@
     ], done);
   });
 
+  /// VCS operations
   gulp.task('commit-changes', function (done) {
     pump([
       gulp.src('.'),
@@ -79,6 +94,7 @@
     $G.git.push('origin', 'master', done);
   });
 
+  /// Packaging
   gulp.task('create-new-tag', function (done) {
     var version = getPackageJsonVersion();
     $G.git.tag(version, 'Created Tag for version: ' + version, function (error) {
@@ -107,6 +123,7 @@
    });
    */
 
+  /// EntryPoint - RELEASE
   gulp.task('release', function (done) {
     $G.sequence(
         'bump-version',
@@ -127,71 +144,155 @@
 
 
   //// BUILD
-  gulp.task('clean-stage', function () {
-    cleanStage();
+
+  /// Cleaners
+  gulp.task('clean-stage', function (done) {
+    clean(paths.stageroot, done);
   });
 
+  gulp.task('clean-less', function (done) {
+    clean(path.join(paths.styleroot, 'less'), done);
+  });
+
+  gulp.task('clean-root', function (done) {
+    var delPaths = [
+      path.join(paths.root, 'ng-dock-panel*.js'),
+      path.join(paths.root, 'ng-dock-panel*.css')
+    ];
+    clean(delPaths, done);
+  });
+
+  /// Styles
   gulp.task('lint-styles', function (done) {
+    var processors = [
+          // require('postcss-unprefix')  // causes first 'transform:' within a block to disappear
+          require('stylelint'),
+          require('postcss-class-prefix')('dock-', {ignore: [/ng-/, /dock-/, /ui-/]}),
+          require('autoprefixer')
+        ],
+        syntax = require('postcss-scss');
+
     pump([
-      gulp.src(path.join(libroot, '**', '*.scss')),
-      lintScss(),
-      gulp.dest(stageroot)
+      gulp.src(path.join(paths.styleroot, globs.scss)),
+      $G.plumber(),
+      $G.postcss(processors, {syntax: syntax}),
+      gulp.dest(paths.stageroot)
     ], done);
   });
 
-  gulp.task('build-module', function (done) {
+  gulp.task('convert-sass-less', function (done) {
+    var srcOptions = {
+      base: path.join(paths.stageroot, 'sass')
+    };
+
     pump([
-      gulp.src([path.join(libroot, '**', '*.module.js'), path.join(libroot, '**', '*.js')]),
-      $G.concat('ng-dock-panel.js'),
-      $G.flatten(),
-      gulp.dest(root),
-      $G.uglify(),
-      $G.rename({extname: '.min.js'}),
-      gulp.dest(root)
+      gulp.src(path.join(paths.stageroot, 'sass', globs.scss), srcOptions),
+      $G.plumber(),
+      $G.change(scss2less),
+      $G.rename({extname: '.less'}),
+      $G.rename(scssResolveUnderscoreFiles),
+      gulp.dest(path.join(paths.styleroot, 'less'))
     ], done);
   });
 
-  gulp.task('build-styles', ['lint-styles'], function (done) {
+  gulp.task('publish-styles', function (done) {
     var processors = [
       require('cssnano')
     ];
 
+    var sassOptions = {
+      outputStyle: 'expanded'
+    };
+
+
     pump([
-      gulp.src(path.join(stageroot, '**', '*.scss')),
+      gulp.src(path.join(paths.stageroot, 'sass', globs.scss)),
+      $G.plumber(),
       $G.sass(sassOptions),
       $G.flatten(),
-      gulp.dest(root),
+      gulp.dest(paths.root),
       $G.postcss(processors),
       $G.rename({extname: '.min.css'}),
-      gulp.dest(root)
+      gulp.dest(paths.root)
     ], done);
   });
 
-  gulp.task('build', ['build-styles', 'build-module']);
+  gulp.task('build-styles', function (done) {
+    $G.sequence('lint-styles', ['convert-sass-less', 'publish-styles'], done);
+  });
+
+  /// Modules
+  gulp.task('build-module', function (done) {
+    pump([
+      gulp.src([path.join(paths.libroot, globs.modules), path.join(paths.libroot, globs.js)]),
+      $G.plumber(),
+      $G.concat('ng-dock-panel.js'),
+      $G.flatten(),
+      gulp.dest(paths.root),
+      $G.uglify(),
+      $G.rename({extname: '.min.js'}),
+      gulp.dest(paths.root)
+    ], done);
+  });
+
+  /// EntryPoint - BUILD
+  gulp.task('build', ['build-styles', 'build-module'], function (done) {
+    done();
+  });
 
 
   //// DEFAULT
   gulp.task('default', function (done) {
-    $G.sequence('build', 'clean-stage', done);
+    $G.sequence(['clean-less', 'clean-root'], 'build', 'clean-stage', done);
+  });
+
+
+  //// EXPERIMENTS ////
+  gulp.task('test-less', function (done) {
+    pump([
+      gulp.src(path.join(paths.styleroot, 'less', globs.less)),
+      $G.plumber(),
+      $G.tap(function (file) {
+        console.log('tapped: ', file.path);
+      }),
+      $G.less(),
+      $G.tap(function (file) {
+        console.log('lessed: ', file.path);
+      }),
+      $G.flatten(),
+      $G.tap(function (file) {
+        console.log('flattened: ', file.path);
+      }),
+      gulp.dest(path.join(paths.root, 'lesstest')),
+    ], done);
   });
 
 
   //// HELPERS ////
-  function lintScss() {
-    var processors = [
-          require('postcss-unprefix'),
-          require('postcss-class-prefix')('dock-', {ignore: [/ng-/, /dock-/, /ui-/]}),
-          require('autoprefixer'),
-          require('stylelint')
-        ],
-        syntax = require('postcss-scss');
+  function scss2less(content) {
+    var rules = conversions.scss2less;
 
-    return combiner(
-        $G.postcss(processors, {syntax: syntax})
-    );
+    return _.reduce(rules, function (content, rule, idx, rules) {
+      var pattern = rule.pattern,
+          replace = rule.replace,
+          iterate = 'iterated' === rule.type;
+
+      do {
+        content = content.replace(pattern, replace);
+      } while (iterate && pattern.test(content));
+
+      return content;
+    }, content);
   }
 
-  function cleanStage() {
-    del.sync(stageroot);
+  function scssResolveUnderscoreFiles(path) {
+    path.basename = path.basename.replace(/^\_/, '');
   }
+
+  function clean(delPaths, done) {
+
+    return Q(del(delPaths))
+        .nodeify(done);
+  }
+
 })();

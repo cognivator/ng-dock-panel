@@ -114,3 +114,11 @@ You can use both `dock-collapsible` and `dock-resizable` on the same dock, if de
 ##Styling
 
 Because ng-dock-panel components are composed of normal HTML elements, you can style them as necessary using a combination of the jquery-ui classes, ng-dock-panel classes and attributes, plus your own custom classes.
+
+### Style distribution (CSS)
+The compiled styles are distributed in the root of the package, as
+`ng-dock-panel.css` (or `.min.css`).
+
+### Style source (SASS / LESS)
+The style source is available as either SCSS or LESS format, in
+`<package-root>/lib/style/sass` or `.../style/less`, respectively. 
