@@ -1,5 +1,9 @@
 #ng-dock-panel
 
+>DEPRECATION NOTICE: This package has been renamed to
+>[cog-dock-panel](https://github.com/cognivator/cog-dock-panel)
+>For a discussion of why only official Angular packages should carry the `ng-` prefix, see [Please leave the ng prefix alone](http://www.codelord.net/2016/04/01/please-leave-the-ng-prefix-alone/).
+
 Angular module for dockable panels
 
 _Forked from dardino/ngDock in order to add ng-show/hide and collapsible panel support._
