@@ -10,8 +10,8 @@
   "repository": "cognivator/ng-dock-panel",
   "main": "ng-dock-panel.js",
   "scripts": {
-    "install": "gulp",
-    "test": "No test configured."
+    "prepublish": "gulp",
+    "test": "echo No test configured."
   },
   "author": "cognivator <slhenty@cognivator.com>",
   "contributors": [
