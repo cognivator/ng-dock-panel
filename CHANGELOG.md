@@ -1,3 +1,9 @@
+<a name="1.0.1"></a>
+## [1.0.1](https://github.com/cognivator/ng-dock-panel/compare/1.0.0...v1.0.1) (2016-10-08)
+
+Update package.json to retain build during pre-publish, but avoid during package installation.
+
+
 <a name="1.0.0"></a>
 # [1.0.0](https://github.com/cognivator/ng-dock-panel/compare/0.1.1...v1.0.0) (2016-10-03)
 
